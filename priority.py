@@ -29,42 +29,42 @@ def createArray (how_many_processes) :
     return processes
 
 def incrementPriority() :
-    if processes1 != [] :
-        p = processes1[-1]
-        processes1.pop()
+    if processes1 != []  and processes2 != []:
+        p = processes1.pop(0)
         processes2.append(p)
-    elif processes2 != [] :
-        p = processes2[-1]
-        processes2.pop()
+        print(f'Process {p} incremented priority: 1 -> 2')
+    elif processes2 != [] and processes3 != []:
+        p = processes2.pop(0)
         processes3.append(p)
-    elif processes3 != [] :
-        p = processes3[-1]
-        processes3.pop()
+        print(f'Process {p} incremented priority: 2 -> 31')
+    elif processes3 != [] and processes4 != []:
+        p = processes3.pop(0)
         processes4.append(p)
+        print(f'Process {p} incremented priority: 3 -> 4')
     else :
-        print("There is no process to increment priorities.")
-    return p
+        print("There is no priority to increment.")
 
-def processing(processes) :
-    time = 0
-    while processes != [] :
-        for p in processes :
-            print(processes)
-            p_aux = p
-            quantum_aux = 0
-            while quantum_aux < quantum and p > 0 :
-                time = time + 1
-                quantum_aux = quantum_aux + 1
-                p = p - 1
-                if time == time_to_increment_priority :
-                    new_p = incrementPriority()
-                    print(f'Process created: {new_p}')
-                    time = 0
-            if p > 0 :
-                p_rest = p_aux - quantum
-                processes.append(p_rest)
-            del processes[0]
-    print(f'END {processes}')
+def processing(processes):
+    global time
+    while processes:
+        process = processes.pop(0)  # Retira o primeiro processo da fila
+        original_process = process  # Salva o valor original do processo
+        quantum_aux = 0
+        
+        while quantum_aux < quantum and process > 0:
+            time += 1
+            quantum_aux += 1
+            process -= 1
+            
+            # Incrementar prioridade ao atingir o tempo
+            if time == time_to_increment_priority:
+                incrementPriority()
+                time = 0
+        
+        if process > 0:
+            processes.append(process)  # Reinsere o processo com o tempo restante
+        print(f"Processed: {original_process}, Remaining: {process}")
+        print(processes)
 
 processes4 = createArray(how_many_processes4)  
 processes3 = createArray(how_many_processes3)  

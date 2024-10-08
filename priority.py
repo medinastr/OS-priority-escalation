@@ -29,11 +29,11 @@ def createArray (how_many_processes) :
     return processes
 
 def incrementPriority() :
-    if processes1 != []  and processes2 != []:
+    if processes1 != []  and (processes2 != [] or processes3 != [] or processes4 != []) :
         p = processes1.pop(0)
         processes2.append(p)
         print(f'Process {p} incremented priority: 1 -> 2')
-    elif processes2 != [] and processes3 != []:
+    elif processes2 != [] and (processes3 != [] or processes4 != []):
         p = processes2.pop(0)
         processes3.append(p)
         print(f'Process {p} incremented priority: 2 -> 31')
@@ -45,6 +45,7 @@ def incrementPriority() :
         print("There is no priority to increment.")
 
 def processing(processes):
+    print(processes)
     global time
     while processes:
         process = processes.pop(0)  # Retira o primeiro processo da fila

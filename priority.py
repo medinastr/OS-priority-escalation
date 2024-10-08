@@ -20,11 +20,12 @@ except ValueError:
 
 time = 0
 
-def createArray (how_many_processes) :
+def createArray (how_many_processes, priority) :
     processes = []
     p = 0
     while p < how_many_processes :
-        processes.append(random.randint(1,20))
+        new_process = {"time": random.randint(1,20), "priority": priority}
+        processes.append(new_process)
         p = p + 1
     return processes
 
@@ -67,26 +68,33 @@ def processing(processes):
         print(f"Processed: {original_process}, Remaining: {process}")
         print(processes)
 
-processes4 = createArray(how_many_processes4)  
-processes3 = createArray(how_many_processes3)  
-processes2 = createArray(how_many_processes2)  
-processes1 = createArray(how_many_processes1)
+processes4 = createArray(how_many_processes4, 4)  
+processes3 = createArray(how_many_processes3, 3)  
+processes2 = createArray(how_many_processes2, 2)  
+processes1 = createArray(how_many_processes1, 1)
 
-print(processes4)
-print(processes3)
-print(processes2)
-print(processes1)
+print(f'Begin of processes of priority 4: {processes4}')
+print(f'Begin of processes of priority 3: {processes3}')
+print(f'Begin of processes of priority 2: {processes2}')
+print(f'Begin of processes of priority 1: {processes1}')
 
+print("---------------------------------------------------")
 print("PROCESSING 4")
 processing(processes4)
+
+print("---------------------------------------------------")
 print("PROCESSING 3")
 processing(processes3)
+
+print("---------------------------------------------------")
 print("PROCESSING 2")
 processing(processes2)
+
+print("---------------------------------------------------")
 print("PROCESSING 1")
 processing(processes1)
 
-print(processes4)
-print(processes3)
-print(processes2)
-print(processes1)
+print(f'End of processes of priority 4: {processes4}')
+print(f'End of processes of priority 3: {processes3}')
+print(f'End of processes of priority 2: {processes2}')
+print(f'End of processes of priority 1: {processes1}')

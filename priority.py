@@ -49,6 +49,15 @@ def incrementPriority() :
     else :
         print("There is no priority to increment.")
 
+def findPriority(priority) :
+    if priority == 3 :
+        return 0
+    elif priority == 2 :
+        return 1
+    elif priority == 1 :
+        return 2
+    elif priority == 0 :
+        return 3
 
 def processing(processes):
     showProcesses(processes)
@@ -65,7 +74,7 @@ def processing(processes):
 
         while processesOfPriority :
 
-            process = processesOfPriority.pop(0)
+            process = processesOfPriority[0]
             original_process = process.copy()
             quantum_aux = 0
         
@@ -77,11 +86,14 @@ def processing(processes):
                 if time == time_to_increment_priority:
                     incrementPriority()
                     time = 0
-                    print("Priorities incremented during this process.")
+                    print("Priorities incremented during this process:")
+            
+            processesOfPriority.pop(0)
 
             if process["time"] > 0:
+                print(process["priority"], aux)
                 if (process["priority"]) < aux :
-                    priority = process["priority"]
+                    priority = findPriority(process["priority"])
                     processes[priority].append(process)
                 else :
                     processesOfPriority.append(process)

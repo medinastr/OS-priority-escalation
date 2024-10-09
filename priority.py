@@ -1,18 +1,18 @@
 import random
 
 
-answer_how_many_processes4 = input("How many processes of priority 4? ")
 answer_how_many_processes3 = input("How many processes of priority 3? ")
 answer_how_many_processes2 = input("How many processes of priority 2? ")
 answer_how_many_processes1 = input("How many processes of priority 1? ")
+answer_how_many_processes0 = input("How many processes of priority 0? ")
 answer_quantum = input("What is the quantum size? (1 to 8) ")
 answer_time_to_increment_priority = input("How much time to increment the priority? ")
 
 try :
-    how_many_processes4 = int(answer_how_many_processes4)
     how_many_processes3 = int(answer_how_many_processes3)
     how_many_processes2 = int(answer_how_many_processes2)
     how_many_processes1 = int(answer_how_many_processes1)
+    how_many_processes0 = int(answer_how_many_processes0)
     quantum = int(answer_quantum)
     time_to_increment_priority = int(answer_time_to_increment_priority)
 except ValueError:
@@ -31,19 +31,19 @@ def createArray (how_many_processes, priority) :
 
 def incrementPriority() :
 
-    if processes1 != []  and (processes2 != [] or processes3 != [] or processes4 != []) :
+    if processes0 != []  and (processes1 != [] or processes2 != [] or processes3 != []) :
+        while processes0 :
+            p = processes0.pop(0)
+            processes1.append(p)
+
+    if processes1 != [] and (processes2 != [] or processes3 != []):
         while processes1 :
             p = processes1.pop(0)
             processes2.append(p)
-
-    if processes2 != [] and (processes3 != [] or processes4 != []):
-        while processes2 :
-            p = processes2.pop(0)
-            processes3.append(p)
     
-    if processes3 != [] and processes4 != []:
-        p = processes3.pop(0)
-        processes4.append(p)
+    if processes2 != [] and processes3 != []:
+        p = processes2.pop(0)
+        processes3.append(p)
 
     else :
         print("There is no priority to increment.")
@@ -69,7 +69,9 @@ def processing(processes):
                 time = 0
         
         if process > 0:
-            processes.append(process)  # Reinsere o processo com o tempo restante
+            if processes.index(process) < (process["priority"] + 1) :
+                processes[process["priority"]]
+        
         print(f"Processed: {original_process}, Remaining: {process}")
         print(processes)
 
@@ -77,21 +79,17 @@ def showProcesses(processes) :
     for p in processes :
         print(p)
 
-processes4 = createArray(how_many_processes4, 4)  
 processes3 = createArray(how_many_processes3, 3)  
 processes2 = createArray(how_many_processes2, 2)  
-processes1 = createArray(how_many_processes1, 1)
+processes1 = createArray(how_many_processes1, 1)  
+processes0 = createArray(how_many_processes0, 0)
 
-processes = [processes4, processes3, processes2, processes1]
+processes = [processes3, processes2, processes1, processes0]
 
-print(f'Begin of processes of priority 4: {processes4}')
 print(f'Begin of processes of priority 3: {processes3}')
 print(f'Begin of processes of priority 2: {processes2}')
 print(f'Begin of processes of priority 1: {processes1}')
-
-print("---------------------------------------------------")
-print("PROCESSING 4")
-processing(processes4)
+print(f'Begin of processes of priority 0: {processes0}')
 
 print("---------------------------------------------------")
 print("PROCESSING 3")
@@ -105,7 +103,11 @@ print("---------------------------------------------------")
 print("PROCESSING 1")
 processing(processes1)
 
-print(f'End of processes of priority 4: {processes4}')
+print("---------------------------------------------------")
+print("PROCESSING 0")
+processing(processes0)
+
 print(f'End of processes of priority 3: {processes3}')
 print(f'End of processes of priority 2: {processes2}')
 print(f'End of processes of priority 1: {processes1}')
+print(f'End of processes of priority 0: {processes0}')

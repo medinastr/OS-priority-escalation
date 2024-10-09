@@ -1,18 +1,18 @@
 import random
 
 
-answer_how_many_processes4 = input("How many processes of priority 4? ")
 answer_how_many_processes3 = input("How many processes of priority 3? ")
 answer_how_many_processes2 = input("How many processes of priority 2? ")
 answer_how_many_processes1 = input("How many processes of priority 1? ")
+answer_how_many_processes0 = input("How many processes of priority 0? ")
 answer_quantum = input("What is the quantum size? (1 to 8) ")
 answer_time_to_increment_priority = input("How much time to increment the priority? ")
 
 try :
-    how_many_processes4 = int(answer_how_many_processes4)
     how_many_processes3 = int(answer_how_many_processes3)
     how_many_processes2 = int(answer_how_many_processes2)
     how_many_processes1 = int(answer_how_many_processes1)
+    how_many_processes0 = int(answer_how_many_processes0)
     quantum = int(answer_quantum)
     time_to_increment_priority = int(answer_time_to_increment_priority)
 except ValueError:
@@ -20,73 +20,107 @@ except ValueError:
 
 time = 0
 
-def createArray (how_many_processes) :
+def createArray (how_many_processes, priority) :
     processes = []
     p = 0
     while p < how_many_processes :
-        processes.append(random.randint(1,20))
+        new_process = {"time": random.randint(1,20), "priority": priority}
+        processes.append(new_process)
         p = p + 1
     return processes
 
 def incrementPriority() :
-    if processes1 != []  and (processes2 != [] or processes3 != [] or processes4 != []) :
-        p = processes1.pop(0)
-        processes2.append(p)
-        print(f'Process {p} incremented priority: 1 -> 2')
-    elif processes2 != [] and (processes3 != [] or processes4 != []):
-        p = processes2.pop(0)
-        processes3.append(p)
-        print(f'Process {p} incremented priority: 2 -> 31')
-    elif processes3 != [] and processes4 != []:
-        p = processes3.pop(0)
-        processes4.append(p)
-        print(f'Process {p} incremented priority: 3 -> 4')
+
+    if processes3 != []:
+        while processes2 != [] :
+            p = processes2.pop(0)
+            processes3.append(p)
+    
+    if processes2 != [] or processes3 != []:
+        while processes1 != [] :
+            p = processes1.pop(0)
+            processes2.append(p)
+
+    if processes1 != [] or processes2 != [] or processes3 != [] :
+        while processes0 != [] :
+            p = processes0.pop(0)
+            processes1.append(p)
+
     else :
         print("There is no priority to increment.")
 
+def findPriority(priority) :
+    if priority == 3 :
+        return 0
+    elif priority == 2 :
+        return 1
+    elif priority == 1 :
+        return 2
+    elif priority == 0 :
+        return 3
+
 def processing(processes):
-    print(processes)
+    showProcesses(processes)
     global time
-    while processes:
-        process = processes.pop(0)  # Retira o primeiro processo da fila
-        original_process = process  # Salva o valor original do processo
-        quantum_aux = 0
+    i = 0
+    aux = 3
+
+    while i <= 3 :
+        processesOfPriority = processes[i]
+        print("------------------------------------------------------------------------")
+        print(f'PROCESSING PRIORITY {aux}')
+        print(processesOfPriority)
+        print()
+
+        while processesOfPriority :
+
+            process = processesOfPriority[0]
+            original_process = process.copy()
+            quantum_aux = 0
         
-        while quantum_aux < quantum and process > 0:
-            time += 1
-            quantum_aux += 1
-            process -= 1
+            while quantum_aux < quantum and process["time"] > 0:
+                time += 1
+                quantum_aux += 1
+                process["time"] -= 1
+        
+                if time == time_to_increment_priority:
+                    incrementPriority()
+                    time = 0
+                    print("Priorities incremented during this process:")
             
-            # Incrementar prioridade ao atingir o tempo
-            if time == time_to_increment_priority:
-                incrementPriority()
-                time = 0
+            processesOfPriority.pop(0)
+
+            if process["time"] > 0:
+                print(process["priority"], aux)
+                if (process["priority"]) < aux :
+                    priority = findPriority(process["priority"])
+                    processes[priority].append(process)
+                else :
+                    processesOfPriority.append(process)
         
-        if process > 0:
-            processes.append(process)  # Reinsere o processo com o tempo restante
-        print(f"Processed: {original_process}, Remaining: {process}")
-        print(processes)
+            print("Processed:", original_process["time"] , ", P:", original_process["priority"], 
+            "| Remaining: ", process["time"])
+            print(f'P3 list: {processes3}')
+            print(f'P2 list: {processes2}')
+            print(f'P1 list: {processes1}')
+            print(f'P0 list: {processes0}', end="\n\n")
+        i += 1
+        aux -= 1
 
-processes4 = createArray(how_many_processes4)  
-processes3 = createArray(how_many_processes3)  
-processes2 = createArray(how_many_processes2)  
-processes1 = createArray(how_many_processes1)
+def showProcesses(processes) :
+    for p in processes :
+        print(p)
 
-print(processes4)
-print(processes3)
-print(processes2)
-print(processes1)
+processes3 = createArray(how_many_processes3, 3)  
+processes2 = createArray(how_many_processes2, 2)  
+processes1 = createArray(how_many_processes1, 1)  
+processes0 = createArray(how_many_processes0, 0)
 
-print("PROCESSING 4")
-processing(processes4)
-print("PROCESSING 3")
-processing(processes3)
-print("PROCESSING 2")
-processing(processes2)
-print("PROCESSING 1")
-processing(processes1)
+processes = [processes3, processes2, processes1, processes0]
 
-print(processes4)
-print(processes3)
-print(processes2)
-print(processes1)
+processing(processes)
+
+print(f'End of processes of priority 3: {processes3}')
+print(f'End of processes of priority 2: {processes2}')
+print(f'End of processes of priority 1: {processes1}')
+print(f'End of processes of priority 0: {processes0}')

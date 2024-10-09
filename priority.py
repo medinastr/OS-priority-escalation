@@ -50,7 +50,7 @@ def incrementPriority() :
 
 
 def processing(processes):
-    print(processes)
+    showProcesses(processes)
     global time
 
     while processes:
@@ -73,10 +73,16 @@ def processing(processes):
         print(f"Processed: {original_process}, Remaining: {process}")
         print(processes)
 
+def showProcesses(processes) :
+    for p in processes :
+        print(p)
+
 processes4 = createArray(how_many_processes4, 4)  
 processes3 = createArray(how_many_processes3, 3)  
 processes2 = createArray(how_many_processes2, 2)  
 processes1 = createArray(how_many_processes1, 1)
+
+processes = [processes4, processes3, processes2, processes1]
 
 print(f'Begin of processes of priority 4: {processes4}')
 print(f'Begin of processes of priority 3: {processes3}')
